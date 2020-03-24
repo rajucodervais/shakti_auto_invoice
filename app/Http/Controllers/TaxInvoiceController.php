@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\TaxInvoice;
 use App\TaxInvoiceProduct;
+use PDF;
 class TaxInvoiceController extends Controller
 {
    	public function index()
@@ -202,6 +203,13 @@ class TaxInvoiceController extends Controller
 
         return redirect()
             ->route('invoices.index');
+    }
+
+    public function create_pdf($id){
+        $tax_invoice = TaxInvoice::with('tax_invoice_products')->findOrFail($id);
+        return view('tax_invoices.pdf', compact('tax_invoice'));
+        // $pdf = PDF::loadView('tax_invoices.pdf', compact('tax_invoice'))->setPaper('a4', 'landscape')->setWarnings(false);
+        // return $pdf->download('invoice.pdf');
     }
 
 }

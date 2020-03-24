@@ -20,6 +20,7 @@ Auth::routes(['register' => false]);
 Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('/challan', 'ChallanController');
 Route::resource('/tax/invoice', 'TaxInvoiceController');
+Route::get('/pdf/{id}', 'TaxInvoiceController@create_pdf')->name('createpdf');
 Route::resource('/quotation', 'QuotationController');
 Route::get('/profile', 'AdminController@profile')->name('profile');
 Route::get('/change/password', 'AdminController@change_pass')->name('changePass');
