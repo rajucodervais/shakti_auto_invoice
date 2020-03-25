@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\TaxInvoice;
 use App\TaxInvoiceProduct;
+use App\State;
 use PDF;
 class TaxInvoiceController extends Controller
 {
@@ -18,7 +19,8 @@ class TaxInvoiceController extends Controller
 
     public function create()
     {
-        return view('tax_invoices.create');
+        $state = State::all();
+        return view('tax_invoices.create', compact('state'));
     }
 
     public function store(Request $request)
@@ -104,13 +106,15 @@ class TaxInvoiceController extends Controller
     public function show($id)
     {
         $tax_invoice = TaxInvoice::with('tax_invoice_products')->findOrFail($id);
-        return view('tax_invoices.show', compact('tax_invoice'));
+        $state = State::findOrFail($tax_invoice->state_name);
+        return view('tax_invoices.show', compact('tax_invoice','state'));
     }
 
     public function edit($id)
     {
+        $state = State::all();
         $tax_invoice = TaxInvoice::with('tax_invoice_products')->findOrFail($id);
-        return view('tax_invoices.edit', compact('tax_invoice'));
+        return view('tax_invoices.edit', compact('tax_invoice','state'));
     }
 
     public function update(Request $request, $id)
@@ -207,9 +211,15 @@ class TaxInvoiceController extends Controller
 
     public function create_pdf($id){
         $tax_invoice = TaxInvoice::with('tax_invoice_products')->findOrFail($id);
-        return view('tax_invoices.pdf', compact('tax_invoice'));
-        // $pdf = PDF::loadView('tax_invoices.pdf', compact('tax_invoice'))->setPaper('a4', 'landscape')->setWarnings(false);
-        // return $pdf->download('invoice.pdf');
+        $state = State::findOrFail($tax_invoice->state_name);
+        $pdf = PDF::loadView('tax_invoices.pdf', compact('tax_invoice','state'));
+        return $pdf->download(time().'_invoice.pdf');
+    }
+
+    public function state_list(Request $request){
+        $id = $request->id;
+        $state = State::findOrFail($id);
+        return $state->state_code;
     }
 
 }

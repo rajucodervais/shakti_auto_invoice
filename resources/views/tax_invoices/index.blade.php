@@ -45,7 +45,7 @@
                             <td>{{$invoice->grand_total}}</td>
                             <td>{{$invoice->created_at->diffForHumans()}}</td>
                             <td class="">
-                                <a href="{{route('createpdf', $invoice->id)}}" class="text-primary btn-sm">print<i class="fa fa-edit"></i></a>
+                                <a href="{{route('createpdf', $invoice->id)}}" class="text-primary btn-sm">PDF<i class="fa fa-edit"></i></a>
                                 <a href="{{route('invoice.edit', $invoice->id)}}" class="text-primary btn-sm">Edit<i class="fa fa-edit"></i></a>
                                 <!-- <a class="text-danger" href="{{route('invoice.destroy', $invoice->id)}}"
                                    onclick="event.preventDefault();

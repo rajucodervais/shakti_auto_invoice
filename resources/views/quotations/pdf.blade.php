@@ -26,26 +26,29 @@
 </head>
 <body>
 
-    @for($i=1;$i<=3;$i++)
+   <style type="text/css">
+    .error{
+        font-size: 10px;
+        color: red;
+    }
+    .border-div{
+        border-top: 1px solid;
+        border-right: 1px solid;
+        border-left: 1px solid;
+    }
+</style>
     <div id="invoice">
         <div class="row border-div">
             <div class="col-md-12">
                 <table style="width: 100%">
-                    <tr><td><h4 align="center" style="margin: 0px">Tax Invoice</h4></td></tr>
+                    <tr><td><h4 align="center" style="margin: 0px">QUOTATION</h4></td></tr>
                     <tr>
                         <td>
                             <div style="float: left;">
-                                <h5>GSTIN - 23DVPPS8059J1ZQ</h5>    
+                               <h5 style="margin-bottom: 3px;"><b>GSTIN - 23DVPPS8059J1ZQ</b></h5>
                             </div>
                             <div align="right">
-                                @if($i == 1)
-                                <h5 style="color:red">ORIGINAL COPY</h5>
-                                @elseif($i == 2)
-                                    <h5 style="color:red">DUPLICATE COPY</h5>
-                                @else
-                                    <h5 style="color:red">EXTRA COPY</h5>
-                                @endif
-                                <h6 style="margin-top: -18px;margin-bottom: 3px;">Mobile No. 8435406506</h6>    
+                                <h5 style="margin-bottom: 3px;"><b>Mobile No. 8435406506</b></h5>
                             </div>
                         </td>
                     </tr>
@@ -55,11 +58,10 @@
         <div class="row border-div" style="background: #e6ffff;">
             <div class="col-md-12">
                 <table style="width: 100%">
+                    <tr><td style="font-family: 'Times New Roman', Times, serif;font-size: 40px;text-align: center;font-weight: bold;">SHAKTI AUTO MOBILE</td></tr>
                     <tr>
-                        <td style="font-family: 'Times New Roman', Times, serif;font-size: 40px;text-align: center;font-weight: bold;">SHAKTI AUTO MOBILE</td></tr>
-                    <tr style="margin-right: 10px">
                         <td>
-                            <div style="float: left;">
+                           <div style="float: left;">
                                 <span>Waidhan, Dist.- Singrauli(M.P.) 486886</span><br>
                                 <span>E-mail:- shaktiauto1984@gmail.com</span>
                             </div>
@@ -75,19 +77,19 @@
         <div class="row border-div">
             <div class="col-md-12">
                 <?php
-                    $id = $tax_invoice->id;
+                    $id = $quotation->id;
                     $string1 = 'SAM/';
                     $string2 = str_pad($id, 6, "0", STR_PAD_LEFT);
-                    $date = date('Y',strtotime($tax_invoice->created_at));
-                    $invoice_no = $string1.$string2.'/'.$date;
+                    $date = date('Y',strtotime($quotation->created_at));
+                    $quotation_no = $string1.$string2.'/'.$date;
                 ?>
                 <table style="width: 100%">
                     <tr>
                         <td>
-                            <span><strong>BILL NO:- {{$invoice_no}} </strong></span>
+                            <span><strong>Quotation NO:- <span style="color: red">{{$quotation_no}}</span> </strong></span>
                         </td>
                         <td align="right">
-                            <span><strong>DATE:- {{date('d/m/Y',strtotime($tax_invoice->date))}}</strong></span>
+                            <span><strong>DATE:- <span style="color: red">{{date('d/m/Y',strtotime($quotation->date))}}</span></strong></span>
                         </td>
                     </tr>
                 </table>
@@ -100,130 +102,95 @@
                         <td colspan="2">
                             <span><strong>TO,</strong></span>
                         </td>
-                        <td align="right">
-                            <span><strong>Vendor Code :- {{$tax_invoice->vendorcode}}</strong></span>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <span><strong>Name :- {{$quotation->name}}</strong></span>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <span><strong>Name :- {{$tax_invoice->name}}</strong></span>
-                        </td>
-                        <td align="right">
-                            <span><strong>Customer GSTIN :- {{$tax_invoice->customergstin}}</strong></span>
+                            <span><strong>Address :- {{$quotation->address}}</strong></span>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <span><strong>Address :- {{$tax_invoice->address}}</strong></span>
-                        </td>
-                        <td align="right">
-                            <span><strong>State Name :- {{$state->state_name}}</strong></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <span><strong>City :- {{$tax_invoice->city}}</strong></span>
-                        </td>
-                        <td align="right">
-                            <span><strong>State Code :- {{$tax_invoice->state_code}}</strong></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <span><strong>Zip Code :- {{$tax_invoice->zip_code}}</strong></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span><strong>Purchage Order No :- {{$tax_invoice->purchage_order_no}}</strong></span>
+                            <span><strong>City :- {{$quotation->city}}</strong></span>
                         </td>
                         <td align="center">
-                            <span><strong>P.O. Date :- {{$tax_invoice->podate}}</strong></span>
+                            <span><strong>State Name :- {{$state->state_name}}</strong></span>
                         </td>
-                        <td align="right">
-                            <span><strong>Delivery Challan No :- {{$tax_invoice->delivery_challan_no}}</strong></span>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <span><strong>Zip Code :- {{$quotation->zip_code}}</strong></span>
                         </td>
+                        <td align="center">
+                            <span><strong>State Code :- {{$quotation->state_code}}</strong></span>
+                        </td>
+                        <td></td>
                     </tr>
                 </table>
             </div>
         </div>
         <div class="row border-div">
         <div class="col-md-12">
-                <table class="table table-bordered" id="tab_invoice" style="width: 100%">
+                <table class="table table-bordered" id="tab_quotation" style="width: 100%" border="1">
                     <thead style="background: yellow">
                         <tr>
-                            <td rowspan="2">Sr No</td>
-                            <td rowspan="2">Description of Goods</td>
-                            <td rowspan="2">HSN/SAC Code</td>
-                            <td rowspan="2">Unit</td>
-                            <td rowspan="2">Qty</td>
-                            <td rowspan="2">Rate</td>
-                            <td rowspan="2">Taxable Value</td>
-                            <td colspan="2">CGST%</td>
-                            <td colspan="2">SGST%</td>
-                            <td>IGST%</td>
-                            <td rowspan="2">Total GST Amount</td>
-                        </tr>
-                        <tr>
+                            <td>Sr No</td>
+                            <td>Description of Goods</td>
+                            <td>Unit</td>
+                            <td>Qty</td>
                             <td>Rate</td>
-                            <td>Amt</td>
-                            <td>Rate</td>
-                            <td>Amt</td>
-                            <td>%</td>
+                            <td>Taxable Value</td>
+                            <td>Discount @ 9%</td>
+                            <td>Taxable Amount</td>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $count = 1; ?>
-                        @foreach($tax_invoice->tax_invoice_products as $product)
+                        @foreach($quotation->quotation_products as $product)
                         <tr>
                           <td><span id="sr_no">{{$count}}</span></td>
                           <td>{{$product->desc}}</td>
-                          <td>{{$product->hsn_code}}</td>
                           <td>{{$product->unit}}</td>
                           <td>{{$product->order_item_quantity}}</td>
                           <td>{{$product->order_item_price}}</td>
                           <td>{{$product->order_item_actual_amount}}</td>
-                          <td>{{$product->cgst_rate}}</td>
-                          <td>{{$product->cgst_amt}}</td>
-                          <td>{{$product->sgst_rate}}</td>
-                          <td>{{$product->sgst_amt}}</td>
-                          <td>{{$product->igst_rate}}</td>
-                          <td>{{$product->total_gst_amt}}</td>
+                          <td>{{$product->discount}}</td>
+                          <td>{{$product->taxable_amount}}</td>
                         </tr>
                         <?php $count++ ?>
                         @endforeach
-                        <tr style="background: yellow">
-                            <td colspan="7"></td>
-                            <td colspan="4" align="center"><h4><b>Summary</b></h4></td>
-                            <td colspan="2" align="center"><h4><b>Amount</b></h4></td>
+                        <tr>
+                            <td colspan="7" align="right"><strong>Sub Total >>>>>>></strong></td>
+                            <td colspan="1" align="center">{{$quotation->sub_total}}</td>
                         </tr>
                         <tr>
-                            <td colspan="7" rowspan="6">
+                            <td colspan="5" rowspan="5">
                                 <h4><strong>Total Invoice Value (In Words):-</strong></h4>              
-                                <h5 style="margin-left: 50px"><b>{{numberTowords($tax_invoice->grand_total)}}</b></h5>
+                                <h5 style="margin-left: 50px"><b>{{numberTowords($quotation->grand_total)}}</b></h5>
                             </td>
-                            <td colspan="4" align="right"><strong>Total Invoice Value</strong></td>
-                            <td colspan="2" align="center">{{$tax_invoice->total_invoice_value}}</td>
+                            <td colspan="2" align="right"><strong>Total Taxable Value</strong></td>
+                            <td align="center"><strong>{{$quotation->total_taxable_value}}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="4" align="right"><strong>Total Taxable Value</strong></td>
-                            <td colspan="2" align="center"><strong>{{$tax_invoice->total_taxable_value}}</strong></td>
+                            <td colspan="2" align="right">CGST @ 9 %</td>
+                            <td align="center"><strong>{{$quotation->cgst}}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="4" align="right"><strong>Add</strong> - Total CGST</td>
-                            <td colspan="2" align="center"><strong>{{$tax_invoice->total_cgst}}</strong></td>
+                            <td colspan="2" align="right">SGST @ 9%</td>
+                            <td align="center"><strong>{{$quotation->sgst}}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="4" align="right"><strong>Add</strong> - Total SGST</td>
-                            <td colspan="2" align="center"><strong>{{$tax_invoice->total_sgst}}</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" align="right"><strong>Add</strong> - Total IGST</td>
-                            <td colspan="2" align="center"><strong>{{$tax_invoice->total_igst}}</strong></td>
+                            <td colspan="2" align="right">IGST @ 18%</td>
+                            <td align="center"><strong>{{$quotation->igst}}</strong></td>
                         </tr>
                         <tr style="background: yellow">
-                            <td colspan="4" align="center"><h4><strong>Grand Total</strong></h4></td>
-                            <td colspan="2" align="center"><h4><strong>{{$tax_invoice->grand_total}}</strong></h4></td>
+                            <td colspan="2" align="center"><h4><strong>Grand Total Rs.</strong></h4></td>
+                            <td align="center"><h4><strong>{{$quotation->grand_total}}</strong></h4></td>
                         </tr>
                     </tbody>    
                 </table>
@@ -247,8 +214,6 @@
             </div>
         </div>
     </div>
-    <div class="page-break"></div>
-@endfor           
 <?php
 function numberTowords($number){
    $no = floor($number);
@@ -289,8 +254,8 @@ function numberTowords($number){
   $points = ($point) ?
     "." . $words[$point / 10] . " " . 
           $words[$point = $point % 10] : '';
-  echo "Rupees ".$result ;
+  echo $result." Only" ;
 }
- ?> 
+ ?>  
 </body>
 </html>

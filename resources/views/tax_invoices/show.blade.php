@@ -95,7 +95,7 @@
                                     <span><strong>Address :- {{$tax_invoice->address}}</strong></span>
                                 </td>
                                 <td align="right">
-                                    <span><strong>State Name :- {{$tax_invoice->state_name}}</strong></span>
+                                    <span><strong>State Name :- {{$state->state_name}}</strong></span>
                                 </td>
                             </tr>
                             <tr>

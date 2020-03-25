@@ -94,7 +94,12 @@
                                 <label>State Name <span class="error">*</span></label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" name="state_name" id="state_name" class="state_name form-control" value="{{$tax_invoice->state_name}}">
+                                    <select name="state_name" id="state_name" class="state_name form-control">
+                                        <option value="">Select State</option>
+                                        @foreach($state as $st)
+                                            <option value="{{$st->id}}" {{($tax_invoice->state_name == $st->id)?'selected':''}}>{{$st->state_name}}</option>
+                                        @endforeach
+                                    </select>
                                     @if($errors->has('state_name'))
                                         <div class="error">{{ $errors->first('state_name') }}</div>
                                     @endif 

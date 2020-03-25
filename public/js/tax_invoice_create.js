@@ -6,7 +6,23 @@ $(document).ready(function(){
   $("#podate").datepicker({
       minDate: 0, // 0 days offset = today
   });
-  
+  $.ajaxSetup({
+    headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+
+  $(document).on('change','.state_name', function(){
+    var id = $(this).children('option:selected').val();
+    $.ajax({
+      type:'GET',
+      url:'/getstatelist',
+      data:{id:id},
+      success:function(data) {
+        $(".state_code").val(data);
+      }
+    })
+  });
   var total_invoice_value = $('#total_invoice_value').text();
   var count = 1;
   

@@ -15,6 +15,18 @@ class CreateQuotationsTable extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('vendorcode');
+            $table->string('name');
+            $table->string('customergstin');
+            $table->string('city');
+            $table->string('state_name');
+            $table->bigInteger('zip_code');
+            $table->integer('state_code');
+            $table->text('address');
+            $table->string('date');
+            $table->string('podate');
+            $table->integer('purchage_order_no');
+            $table->integer('delivery_challan_no')->nullable();
             $table->timestamps();
         });
     }

@@ -27,12 +27,6 @@ class CreateTaxInvoicesTable extends Migration
             $table->string('podate');
             $table->integer('purchage_order_no');
             $table->integer('delivery_challan_no')->nullable();
-            $table->decimal('total_invoice_value');
-            $table->decimal('total_taxable_value');
-            $table->decimal('total_cgst');
-            $table->decimal('total_sgst');
-            $table->decimal('total_igst');
-            $table->decimal('grand_total');
             $table->timestamps();
         });
     }
