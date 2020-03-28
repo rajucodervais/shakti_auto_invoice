@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>AutoShakti Mobile</title>
+    <title>Shakti Auto Mobile</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" ></script>
@@ -43,7 +43,7 @@
             </div>
           <!-- End of Main Content -->
           <!-- Footer -->
-          @include('admin.footer')
+          <!-- @include('admin.footer') -->
           <!-- End of Footer -->
         </div>
         <!-- End of Content Wrapper -->
@@ -52,6 +52,5 @@
      <script src= 
 "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" > 
     </script> 
-    @yield('scripts')
 </body>
 </html>

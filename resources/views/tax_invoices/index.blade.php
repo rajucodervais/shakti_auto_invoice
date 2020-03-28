@@ -1,22 +1,27 @@
 @extends('layouts.adminLayout')
 @section('content')
 <div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Tax invoice</h1>
+        <a href="{{route('invoice.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Create Inovice</a>
+    </div>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <input type="text" class="keyword input-sm" id="keyword" name="keyword" placeholder="serach Here">
+        <input type="text" class="from_date" id="from_date" name="from_date" placeholder="From Date">
+        <input type="text" class="to_date" id="to_date" name="to_date" placeholder="To Date">
+        <button type="button" class="search_btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Submit</button>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm generate_report"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    </div>
 
-<div class="card card-default">
-        <div class="card-header">
-            <div class="clearfix">
-                <span class="card-title">Tax Invoices</span>
-                <a href="{{route('invoice.create')}}" class="btn btn-success pull-right">Create</a>
-            </div>
-        </div>
-        <div class="card-body">
+  <!-- Content Row -->
+    <div class="row">
             @if(session()->has('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
             @if($invoices->count())
-            <table class="table table-bordered" style="">
+            <table class="table table-bordered tax_invoices_table" style="">
                 <thead>
                     <tr>
                         <th>Invoice No</th>
@@ -71,7 +76,52 @@
                     </p>
                 </div>
             @endif
-        </div>
-    </div>
+     </div>   
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#from_date").datepicker();
+    $("#to_date").datepicker();
+    $('.search_btn').on('click', function(){
+        var from_date = $('.from_date').val();
+        var to_date = $('.to_date').val();
+        $.ajax({
+            type : "GET",
+            url : "{{route('invoice_search_btn')}}",
+            data:{from_date:from_date,to_date:to_date},
+            success:function(data){
+                console.log(data);
+                $('.tax_invoices_table tbody').html(data);
+            }
+         });
+    })
+
+    $('.keyword').on('keyup', function(){
+        var value = $(this).val();
+        $.ajax({
+            type : "GET",
+            url : "{{route('invoice_keyword')}}",
+            data:{search:value},
+            success:function(data){
+                console.log(data);
+                $('.tax_invoices_table tbody').html(data);
+            }
+         });
+    });
+    $('.generate_report').on('click', function(){
+        var from_date = $('.from_date').val();
+        var to_date = $('.to_date').val();
+        $.ajax({
+            type : "GET",
+            url : "{{route('invoice_generate_report')}}",
+            data:{from_date:from_date,to_date:to_date},
+            success:function(data){
+                console.log(data);
+                // $('.tax_invoices_table tbody').html(data);
+            }
+         });
+    })
+})
+</script>
+<!-- <script src="{{asset('js/main.js')}}"></script> -->
 @endsection

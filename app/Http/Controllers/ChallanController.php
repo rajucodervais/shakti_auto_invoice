@@ -147,5 +147,26 @@ class ChallanController extends Controller
         $pdf = PDF::loadView('challans.pdf', compact('challan','state'));
         return $pdf->download(time().'_challan.pdf');
     }
+    public function search_keyword(Request $request){
+        if($request->search != null){
+            $challan = Challan::where('name','LIKE','%'.$request->search."%")->orderBy('created_at', 'desc')->paginate(10);
+        }
+        return view('challans.ajax', compact('challan'));    
+    }
+
+    public function search_between_invoice(Request $request){
+        // dd($request);
+        if ($request->input('from_date')<>'' && $request->input('to_date')<>'')
+        {    
+            $start = date("Y-m-d",strtotime($request->input('from_date')));
+            $end = date("Y-m-d",strtotime($request->input('to_date')."+1 day"));
+            $challan = Challan::whereBetween('created_at',[$start,$end])->orderBy('created_at', 'desc')->paginate(10);
+        }
+        return view('challans.ajax', compact('challan'));
+    }
+
+    public function generate_report(Request $request){
+        dd('challan report');
+    }
 
 }

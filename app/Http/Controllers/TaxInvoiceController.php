@@ -7,6 +7,8 @@ use App\TaxInvoice;
 use App\TaxInvoiceProduct;
 use App\State;
 use PDF;
+use Response;
+// use Maatwebsite\Excel\Facades\Excel;
 class TaxInvoiceController extends Controller
 {
    	public function index()
@@ -216,7 +218,92 @@ class TaxInvoiceController extends Controller
         return $pdf->download(time().'_invoice.pdf');
     }
 
-    public function state_list(Request $request){
+    public function search_keyword(Request $request){
+        if($request->search != null){
+            $invoices = TaxInvoice::where('name','LIKE','%'.$request->search."%")->get();
+        }
+        return view('tax_invoices.ajax', compact('invoices'));    
+    }
+
+    public function search_between_invoice(Request $request){
+        // dd($request);
+        if ($request->input('from_date')<>'' && $request->input('to_date')<>'')
+        {    
+            $start = date("Y-m-d",strtotime($request->input('from_date')));
+            $end = date("Y-m-d",strtotime($request->input('to_date')."+1 day"));
+            $invoices = TaxInvoice::whereBetween('created_at',[$start,$end])->get();
+        }
+        return view('tax_invoices.ajax', compact('invoices'));
+    }
+
+    public function generate_report(Request $request){
+        if ($request->input('from_date')<>'' && $request->input('to_date')<>'')
+        {    
+            $filename = "report.csv";
+            $start = date("Y-m-d",strtotime($request->input('from_date')));
+            $end = date("Y-m-d",strtotime($request->input('to_date')."+1 day"));
+            $invoices = TaxInvoice::with('tax_invoice_products')->whereBetween('created_at',[$start,$end])->get();
+            header('Content-Type: applicaton/csv');
+            header('Content-Disposition: attachment; filename="'.$filename.'"');   
+            $FH = fopen('report.csv', 'w');
+                foreach ($invoices as $key => $value) {
+                    $id = $value->id;
+                    $string1 = 'SAM/';
+                    $string2 = str_pad($id, 6, "0", STR_PAD_LEFT);
+                    $date = date('Y',strtotime($value->created_at));
+                    $invoice_no = $string1.$string2.'/'.$date;
+                    foreach ($value->tax_invoice_products as $key => $products) {
+                    $output = array($invoice_no,$value->name,$value->city,$value->state_name,$value->state_code,$value->zip_code,$value->address,$value->date,$value->podate,$products->desc,$products->hsn_code,$products->unit,$products->order_item_price,$products->order_item_quantity,$products->order_item_actual_amount,$products->cgst_rate,$products->cgst_amt,$products->sgst_rate,$products->sgst_amt,$products->igst_rate,$products->total_gst_amt);
+                    fputcsv($FH, $output);    
+                    }            
+                }
+            fclose($FH);
+            // $headers = array(
+            //     'Content-Type' => 'applicaton/csv',
+            // );
+
+            // return Response::download($filename,'download.csv', $headers);
+            // return Excel::download(new UsersExport, $filename);
+            // return Response::download($callback, 200, $headers); 
+            // $output = '';
+            // $output .=  '<table>';
+            // foreach ($invoices as $key => $value) {
+            //     $id = $value->id;
+            //     $string1 = 'SAM/';
+            //     $string2 = str_pad($id, 6, "0", STR_PAD_LEFT);
+            //     $date = date('Y',strtotime($value->created_at));
+            //     $invoice_no = $string1.$string2.'/'.$date;
+            //     foreach ($value->tax_invoice_products as $key => $products) {
+            //     $output .='<tr>
+            //                     <td>'.$invoice_no.'</td>
+            //                     <td>'.$value->name.'</td>
+            //                     <td>'.$value->city.'</td>
+            //                     <td>'.$value->state_name.'</td>
+            //                     <td>'.$value->state_code.'</td>
+            //                     <td>'.$value->zip_code.'</td>
+            //                     <td>'.$value->address.'</td>
+            //                     <td>'.$value->date.'</td>
+            //                     <td>'.$value->podate.'</td>
+            //                     <td>'.$products->desc.'</td>
+            //                     <td>'.$products->hsn_code.'</td>
+            //                     <td>'.$products->unit.'</td>
+            //                     <td>'.$products->order_item_price.'</td>
+            //                     <td>'.$products->order_item_quantity.'</td>
+            //                     <td>'.$products->order_item_actual_amount.'</td>
+            //                     <td>'.$products->cgst_rate.'</td>
+            //                     <td>'.$products->cgst_amt.'</td>
+            //                     <td>'.$products->sgst_rate.'</td>
+            //                     <td>'.$products->sgst_amt.'</td>
+            //                     <td>'.$products->igst_rate.'</td>
+            //                     <td>'.$products->total_gst_amt.'</td>
+            //                 </tr>';
+            //     }            
+            // }
+            // $output .= '</table>';
+            // echo $output;
+        }
+    }
+   public function state_list(Request $request){
         $id = $request->id;
         $state = State::findOrFail($id);
         return $state->state_code;

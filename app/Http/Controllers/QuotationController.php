@@ -168,8 +168,28 @@ class QuotationController extends Controller
     public function create_pdf($id){
         $quotation = Quotation::with('quotation_products')->findOrFail($id);
         $state = State::findOrFail($quotation->state_name);
-        // return view('quotations.pdf', compact('quotation','state'));
         $pdf = PDF::loadView('quotations.pdf', compact('quotation','state'));
         return $pdf->download(time().'_quotation.pdf');
+    }
+
+    public function search_keyword(Request $request){
+        if($request->search != null){
+            $quotations = Quotation::where('name','LIKE','%'.$request->search."%")->orderBy('created_at', 'desc')->paginate(10);
+        }
+        return view('quotations.ajax', compact('quotations'));    
+    }
+
+    public function search_between_invoice(Request $request){
+        // dd($request);
+        if ($request->input('from_date')<>'' && $request->input('to_date')<>'')
+        {    
+            $start = date("Y-m-d",strtotime($request->input('from_date')));
+            $end = date("Y-m-d",strtotime($request->input('to_date')."+1 day"));
+            $quotations = Quotation::whereBetween('created_at',[$start,$end])->orderBy('created_at', 'desc')->paginate(10);
+        }
+        return view('quotations.ajax', compact('quotations'));
+    }
+    public function generate_report(Request $request){
+        dd('quotaiton report');
     }
 }
